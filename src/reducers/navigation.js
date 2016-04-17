@@ -8,11 +8,13 @@ import {
   NAV_RESET
 } from '../actions/navigation'
 
+import { routes } from '../router'
+
 const initialState = {
 	key: 'MainNavigation',
 	index: 0,
 	children: [
-		{ key: 'First' }
+		{ key: routes.login.key }
 	]
 }
 

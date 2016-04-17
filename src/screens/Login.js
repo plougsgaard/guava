@@ -3,7 +3,8 @@ import React, {
   Component,
   StyleSheet,
   Text,
-  View
+  View,
+  TextInput
 } from 'react-native'
 import _ from 'lodash'
 import ReactTimeout from 'react-timeout'
@@ -11,9 +12,14 @@ import lifecycle from '../helpers/lifecycle'
 import { connect } from 'react-redux'
 import { compose, withState } from 'recompose'
 
+import Container from '../blocks/Container'
+import Button from '../blocks/Button'
+
+import { HEADER_HEIGHT } from '../config'
+
 import { handleSubmitLogin } from '../reducers/session'
 
-const Monkey = ({
+const LoginScreen = ({
   dispatch, session // redux
 }) => {
   const submitter = handleSubmitLogin()
@@ -21,13 +27,23 @@ const Monkey = ({
     submitter({ email: 'a@a.a', password: 'secret' }, dispatch)
   }
   return (
-    <View>
-      <Text>{' '}</Text>
+    <Container>
       <Text>This is the LOGIN screen</Text>
       <Text>token: {session.token}</Text>
+      <Text>Email</Text>
+      <TextInput
+        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        value='' />
+      <Text>Password</Text>
+      <TextInput value='' />
 
-      <Text onPress={submitFn}>login</Text>
-    </View>
+      <Button
+        style={{}}
+        textStyle={{}}
+        onPress={submitFn}>
+        Try credentials
+      </Button>
+    </Container>
   )
 }
 
@@ -36,10 +52,10 @@ export default compose(
   connect(({ session }) => ({ session })),
   lifecycle({
     enter: (d) => {
-      alert('enter')
+
     },
     leave: (d) => {
-      alert('bye')
+
     }
   })
-)(Monkey)
+)(LoginScreen)
