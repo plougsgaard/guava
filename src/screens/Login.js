@@ -1,27 +1,39 @@
-import React, { Component } from 'react-native'
+import React, {
+  AppRegistry,
+  Component,
+  StyleSheet,
+  Text,
+  View,
+  TextInput
+} from 'react-native'
+import _ from 'lodash'
+import ReactTimeout from 'react-timeout'
+import lifecycle from '../helpers/lifecycle'
+import { connect } from 'react-redux'
+import { compose, withState } from 'recompose'
+import Container from '../blocks/Container'
+import Button from '../blocks/Button'
+import { HEADER_HEIGHT } from '../config'
+import { handleSubmitLogin } from '../reducers/session'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { StatelessForm, InlineTextInput } from 'react-native-stateless-form'
 
-class Form extends Component {
-  constructor(props, context) {
-    super(props, context)
-    this.state = {
-      name: null,
-      email: null,
-      password: null,
-    }
-  }
+const LoginScreen = ({ formState, setFormState }) => {
+  const { name, email, password } = formState
+  const setFormStateName = (name) => setFormState({ ...formState, name })
+  const setFormStateEmail = (email) => setFormState({ ...formState, email })
+  const setFormStatePassword = (password) => setFormState({ ...formState, password })
 
-  render() {
-    const { name, email, password } = this.state
-    const nameValid = (name && name.length > 0 ? true : false)
-    const emailValid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
-    const passwordValid = (password && password.length >= 8 ? true : false)
-    return (
+  const nameValid = (name && name.length > 0 ? true : false)
+  const emailValid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
+  const passwordValid = (password && password.length >= 8 ? true : false)
+  const submitFn = () => { alert('let us not get carried away here') }
+
+  return (
+    <Container>
       <StatelessForm style={{
-        flex: 1,
-        marginTop: 20,
-        backgroundColor: 'lightgray',
+        // flex: 1,
+        // backgroundColor: 'lightgray',
       }}>
         <InlineTextInput
           title='Name'
@@ -36,7 +48,7 @@ class Form extends Component {
           value={name}
           valid={nameValid}
           message={name && !nameValid ? 'Please fill your name' : null}
-          onChangeText={(text) => { this.setState({name: text}) }}
+          onChangeText={setFormStateName}
         />
         <InlineTextInput
           title='Email'
@@ -54,7 +66,7 @@ class Form extends Component {
           value={email}
           valid={emailValid}
           message={email && !emailValid ? 'Please enter a valid email address' : null}
-          onChangeText={(text) => { this.setState({email: text}) }}
+          onChangeText={setFormStateEmail}
         />
         <InlineTextInput
           title='Password'
@@ -72,14 +84,48 @@ class Form extends Component {
           value={password}
           valid={passwordValid}
           message={password && !passwordValid ? 'Password too short' : null}
-          onChangeText={(text) => { this.setState({password: text}) }}
+          onChangeText={setFormStatePassword}
         />
       </StatelessForm>
-    )
-  }
+      <View
+        style={{
+          padding: 15
+        }}>
+        <Button
+          style={{
+            borderRadius: 0,
+            backgroundColor: '#D690CB',
+            borderColor: '#D690CB',
+            padding: 15
+          }}
+          textStyle={{
+            color: 'white'
+          }}
+          onPress={submitFn}>
+          Try credentials
+        </Button>
+      </View>
+    </Container>
+  )
 }
 
-export default Form
+export default compose(
+  //ReactTimeout,
+  connect(({ session }) => ({ session })),
+  withState('formState', 'setFormState', {
+    name: 'Thomas!',
+    email: null,
+    password: null
+  }),
+  lifecycle({
+    enter: (d) => {
+
+    },
+    leave: (d) => {
+
+    }
+  })
+)(LoginScreen)
 
 // import React, {
 //   AppRegistry,
@@ -107,7 +153,7 @@ export default Form
 // }) => {
 //   const submitter = handleSubmitLogin()
 //   const submitFn = () => {
-//     submitter({ email: 'a@a.a', password: 'secret' }, dispatch)
+//submitter({ email: 'a@a.a', password: 'secret' }, dispatch)
 //   }
 //   return (
 //     <Container>

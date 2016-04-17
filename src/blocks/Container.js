@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   content: {
+    backgroundColor: '#2F9CB2',
     flex: 1,
-    marginTop: HEADER_HEIGHT,
-    padding: 5
+    marginTop: HEADER_HEIGHT
   }
 })
